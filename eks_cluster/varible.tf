@@ -1,23 +1,14 @@
-variable "aws_access_key" {
-  description = "AWS access key"
-  type        = string
-}
-
-variable "aws_secret_key" {
-  description = "AWS secret key"
-  type        = string
-}
 
 variable "region" {
   description = "The aws region. https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "availability_zones_count" {
   description = "The number of AZs."
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "project" {
@@ -29,7 +20,7 @@ variable "project" {
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "10.100.0.0/16"
 }
 
 variable "subnet_cidr_bits" {
@@ -42,7 +33,7 @@ variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
   default = {
-    "Project"     = "TerraformEKSWorkshop"
+    "Project"     = "Terraform_EKS"
     "Environment" = "Development"
     "Owner"       = "dhanapal"
   }
