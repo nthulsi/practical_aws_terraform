@@ -3,12 +3,6 @@
 
 terraform {
   required_version = ">= 1.1.0"
-  backend "s3" {
-    bucket = "dhanapal_eks_storage"
-    key    = "terraform/state"
-    region         = "ap-south-1"
-    encrypt        = true
-  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"

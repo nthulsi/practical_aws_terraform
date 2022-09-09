@@ -8,7 +8,7 @@ variable "region" {
 variable "availability_zones_count" {
   description = "The number of AZs."
   type        = number
-  default     = 3
+  default     = 2
 }
 
 variable "project" {
