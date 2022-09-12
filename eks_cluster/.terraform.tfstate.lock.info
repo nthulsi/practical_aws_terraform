@@ -1,1 +1,1 @@
-{"ID":"9cf25793-48e9-c84b-87cf-c4fd2f6e9ae8","Operation":"OperationTypePlan","Info":"","Who":"DESKTOP-LJKIREI\\Dhana@DESKTOP-LJKIREI","Version":"1.2.8","Created":"2022-09-09T15:16:42.5211965Z","Path":"terraform.tfstate"}
+{"ID":"56defdc2-7b8a-fb82-f057-15cf2902c0be","Operation":"OperationTypeApply","Info":"","Who":"ec2-user@terraform.cntech.local","Version":"1.2.8","Created":"2022-09-10T05:52:38.067678517Z","Path":"terraform.tfstate"}
