@@ -1,5 +1,6 @@
 output "vpc_id" {
-  #value = aws_vpc.<name of resource_type>.id
+  #resource "<provider>_<resource_type>" "name" {
+  #value = aws_vpc.<name of resource_type>.vpc_id
   value = aws_vpc.VPC-A.id
 }
 output "public_subnet_id" {

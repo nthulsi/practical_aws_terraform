@@ -6,6 +6,7 @@ provider "aws" {
   #secret_key = "P7x5mXLqUAcukInQvL/B0WgNnDgNQcLiPMymw6u8"
 }
 #1.creating the vpc with main name
+#resource "<provider>_<resource_type>" "name" {
 resource "aws_vpc" "VPC-A" {
   cidr_block       = "10.50.0.0/16"
   instance_tenancy = "default"
@@ -91,35 +92,43 @@ resource "aws_route_table_association" "private" {
 }
 #6.create the security group
 resource "aws_security_group" "security-group" {
-  name        = "allow_pots"
+  name        = "allow_ports"
   description = "Allow ports inbound traffic"
   vpc_id      = aws_vpc.VPC-A.id
 
+# Inbound Rules
+  # HTTP access from anywhere
   ingress {
-    description      = "https port"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
+  # HTTPS access from anywhere
   ingress {
-    description      = "ssh port"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
-  
+  # SSH access from anywhere
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+  }
+# Outbound Rules
+  # Internet access to anywhere
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    #ipv6_cidr_blocks = ["::/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-
   tags = {
     Name = "${var.vpc_name}-security-group"
   }

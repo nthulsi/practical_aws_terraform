@@ -1,4 +1,3 @@
-
 #provider name and region 
 provider "aws" {
   region     = "ap-south-1"
@@ -6,6 +5,7 @@ provider "aws" {
 }
 ##creating the ec2-instance
 resource "aws_instance" "test-terraform" {
+  count = 2
   ami           = var.ami_image_id.redhat
   instance_type = var.instance_type[0]
   key_name               = var.key_pair
@@ -15,11 +15,28 @@ resource "aws_instance" "test-terraform" {
   vpc_security_group_ids = [ "sg-04e6c7ee02cef7364" ]
   #security_groups =  vpc-a-security-group
   subnet_id = var.public_subnet_id
+  user_data = "${file("httpd.sh")}"
   tags = {
-    Name = var.tags
+    Name = "var.tags-${count.index}"
   }
 }
 
 output "instance_ip_addr" {
   value = aws_instance.terraform.private_ip
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
