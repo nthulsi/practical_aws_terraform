@@ -1,4 +1,8 @@
-
+variable "region_name" {
+  description = "region name"
+  type        = string
+  default     = "ap-south-1"
+}
 variable "vpc_name" {
   description = "vpc_name"
   type        = string

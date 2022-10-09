@@ -8,7 +8,7 @@ provider "aws" {
 #1.creating the vpc with main name
 #resource "<provider>_<resource_type>" "name" {
 resource "aws_vpc" "VPC-A" {
-  cidr_block       = "10.50.0.0/16"
+  cidr_block       = var.vpc_cidr_block
   instance_tenancy = "default"
   enable_dns_hostnames    = true
   tags = {

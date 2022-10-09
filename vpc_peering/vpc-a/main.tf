@@ -1,7 +1,7 @@
 #creating vpc, internet_gateway, route table, subnet, associate the subnet to route table and security_group
 #provider
 provider "aws" {
-  region     = "ap-south-1"
+  region     = var.region_name
   #access_key = "AKIA4PNPSPCJFINHAHVO"
   #secret_key = "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"
 }

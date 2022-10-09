@@ -102,7 +102,6 @@ resource "aws_route" "main" {
   nat_gateway_id         = aws_nat_gateway.main.id
   destination_cidr_block = "0.0.0.0/0"
 }
-==============
 # Route Table(s)
 # Route the public subnet traffic through the IGW
 resource "aws_route_table" "main" {
