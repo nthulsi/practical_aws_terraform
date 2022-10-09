@@ -21,7 +21,7 @@ resource "aws_vpc_peering_connection" "peer" {
   peer_owner_id = data.aws_caller_identity.current.account_id
   peer_vpc_id   = var.peer_vpc_id
   vpc_id        = var.requester_vpc_id
-  peer_region   = var.peer_region
+  peer_region   = aws.peer
   auto_accept   = false
   tags = {
     Side = "Requester"
