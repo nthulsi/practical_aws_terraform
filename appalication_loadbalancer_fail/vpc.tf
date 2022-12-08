@@ -1,21 +1,23 @@
 #creating vpc, internet_gateway, route table, subnet, associate the subnet to route table and security_group
 #provider
 provider "aws" {
-  region     = var.region_name
+  region = "ap-south-1"
+  #access_key = "AKIA4PNPSPCJFINHAHVO"
+  #secret_key = "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"
 }
 #1.creating the vpc with main name
 #resource "<provider>_<resource_type>" "name" {
-resource "aws_vpc" "VPC-B" {
-  cidr_block       = var.vpc_cidr_block
-  instance_tenancy = "default"
-  enable_dns_hostnames    = true
+resource "aws_vpc" "VPC-A" {
+  cidr_block           = var.vpc_cidr_block
+  instance_tenancy     = "default"
+  enable_dns_hostnames = true
   tags = {
-    Name =  "prod-${var.vpc_name}"
+    Name = "prod-${var.vpc_name}"
   }
 }
 #2.create internet gateway
-resource "aws_internet_gateway" "VPC-B-IGW" {
-  vpc_id = aws_vpc.VPC-B.id
+resource "aws_internet_gateway" "VPC-A-IGW" {
+  vpc_id = aws_vpc.VPC-A.id
 
   tags = {
     Name = "${var.vpc_name}-IGW"
@@ -25,11 +27,11 @@ resource "aws_internet_gateway" "VPC-B-IGW" {
 #creating the public_route_table
 
 resource "aws_route_table" "Public-RT" {
-  vpc_id = aws_vpc.VPC-B.id
+  vpc_id = aws_vpc.VPC-A.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.VPC-B-IGW.id
+    gateway_id = aws_internet_gateway.VPC-A-IGW.id
   }
 
   tags = {
@@ -38,11 +40,11 @@ resource "aws_route_table" "Public-RT" {
 }
 #creating the private_route_table
 resource "aws_route_table" "Private-RT" {
-  vpc_id = aws_vpc.VPC-B.id
-#here we are leave default route add
+  vpc_id = aws_vpc.VPC-A.id
+  #here we are leave default route add
   #route {
-   # cidr_block = "0.0.0.0/0"
-    #gateway_id = aws_internet_gateway.VPC-B-IGW.id
+  # cidr_block = "0.0.0.0/0"
+  #gateway_id = aws_internet_gateway.VPC-A-IGW.id
   #}
 
   tags = {
@@ -53,10 +55,10 @@ resource "aws_route_table" "Private-RT" {
 #creating the public_subnet
 
 resource "aws_subnet" "Public-Subnet-A" {
-  vpc_id     = aws_vpc.VPC-B.id
+  vpc_id     = aws_vpc.VPC-A.id
   cidr_block = var.public_subnet_cidr_block
   #cidr_block              = "${var.Public_Subnet_1}"
-  availability_zone       = var.public_subnet_availability_zone
+  availability_zone = var.public_subnet_availability_zone
   #map_public_ip_on_launch = true
   tags = {
     Name = "Public-Subnet-${var.name[0]}"
@@ -65,10 +67,10 @@ resource "aws_subnet" "Public-Subnet-A" {
 #creating the private_subnet
 
 resource "aws_subnet" "Private-Subnet-A" {
-  vpc_id     = aws_vpc.VPC-B.id
+  vpc_id     = aws_vpc.VPC-A.id
   cidr_block = var.private_subnet_cidr_block
   #cidr_block              = "${var.Public_Subnet_1}"
-  availability_zone       = var.private_subnet_availability_zone
+  availability_zone = var.private_subnet_availability_zone
   #map_public_ip_on_launch = true
   tags = {
     Name = "Private-Subnet-${var.name[0]}"
@@ -89,19 +91,19 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.Private-RT.id
 }
 #6.create the security group
-resource "aws_security_group" "security-group" {
+resource "aws_security_group" "ec2-security-group" {
   name        = "allow_ports"
   description = "Allow ports inbound traffic"
-  vpc_id      = aws_vpc.VPC-B.id
+  vpc_id      = aws_vpc.VPC-A.id
 
-# Inbound Rules
+  # Inbound Rules
   # HTTP access from anywhere
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
   # HTTPS access from anywhere
   ingress {
@@ -109,7 +111,7 @@ resource "aws_security_group" "security-group" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
   # SSH access from anywhere
   ingress {
@@ -117,9 +119,9 @@ resource "aws_security_group" "security-group" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-	#ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
+    #ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
   }
-# Outbound Rules
+  # Outbound Rules
   # Internet access to anywhere
   egress {
     from_port   = 0
@@ -131,4 +133,6 @@ resource "aws_security_group" "security-group" {
     Name = "${var.vpc_name}-security-group"
   }
 }
+
+
 
